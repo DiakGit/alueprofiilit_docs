@@ -1,0 +1,342 @@
+---
+# title: "Alueprofiili test"
+title: "Alueprofiili `r params$region` (`r params$region_level`)"
+# author: "Author test"
+author: "Diakin karttasovellus `r params$datetime`"
+output: 
+  word_document:
+    reference_docx: diak_karttasovellus.dotx
+params:
+  region: NA
+  region_level: NA
+  datetime: NA
+  fig_width_default: NA
+  fig_height_default: NA
+  fig_dpi: NA
+  doc_format: NA
+---
+
+
+
+
+```{r packages, include = FALSE, eval = TRUE}
+libs <- c("ggplot2",
+          "tidyr","hrbrthemes",
+          "karttasovellus",
+          "patchwork","knitr",
+          "ragg","dplyr",
+          "stringr","xtable",
+          "extrafont",
+          "forcats",
+          "viridis","purrr","glue")
+lapply(libs, require, character.only = TRUE)
+
+theme_set(
+  theme_minimal(base_family = "Lato", base_size = 7) +
+    theme(axis.text.y = element_blank(), 
+          panel.grid = element_blank(),
+          plot.title = element_text(size = 9, family = "bold"),
+          plot.subtitle = element_text(size = 12, family = "bold"))
+)
+
+```
+
+
+
+```{r parametrit, include = FALSE}
+if (TRUE){
+params_region <- params$region
+params_region_level <- params$region_level
+params_datetime <- params$datetime
+# params_fig_width_default  <- params$fig_width_default
+# params_fig_height_default <- params$fig_height_default
+params_fig_dpi <- params$fig_dpi
+params_doc_format <- params$doc_format
+} else {
+params_region <- "Itä-Uudenmaan HVA"
+params_region_level <- "Hyvinvointialueet"
+params_datetime <- Sys.time()
+params_fig_width_default  <- 8.3
+params_fig_height_default <- 11.7
+params_fig_dpi <- 192
+params_doc_format <- "docx"
+}
+```
+
+
+
+```{r knitr_setup, include = FALSE}
+ragg_png = function(..., res = 192) {
+  ragg::agg_png(..., res = res, units = "in")
+}
+knitr::opts_chunk$set(list(echo=FALSE, # printtaa koodi outputtiin
+                           eval=TRUE, # evaluoi kaikki kimpaleet jos ei erikseen kielletty
+                           cache=FALSE, # älä luo välimuistia (isoissa datoissa hyvin kätevä)
+                           warning=FALSE, # älä printtaa varoituksia
+                           message=FALSE, # älä printtaa pakettien viestejä
+                           fig.width = 8.3, # kuvien oletusleveys
+                           fig.height = 10.8, # kuvien oletuskorkeus
+                           dpi = 140,
+                           out.width="100%",
+                           dev = "ragg_png", 
+                           fig.ext = "png"))
+```
+
+
+
+```{r data, eval = TRUE}
+data_aikasarja <- get_dat_timeseries()
+region_data <- get_region_data() %>% filter(level %in% params_region_level)
+naapurikoodit <- region_data[region_data$region_name %in% params_region,]$neigbours[[1]]
+tabdat <- print_create_tabdat(params_region_level = params_region_level,
+                                params_region = params_region,
+                              params_naapurikoodit = naapurikoodit)
+# Eri aluetasoilla on eri muuttujat
+valid_variables <- tabdat %>% filter(aluenimi %in% params_region,
+                  !is.na(arvo)) %>%
+  pull(muuttuja)
+spatdat <- process_data_profile_doc(input_value_regio_level_profile = params_region_level)
+```
+
+
+Tämä asiakirja on tuotettu automaattisesti [Diakin karttasovelluksen avulla](http://diak.shinyapps.io/karttasovellus) `r params_datetime`. Asiakirjan tiedot perustuvat THL:n Sotkanet-indikaattoripalvelun tietoihin, joihin on yhdistetty Tilastokeskuksen tilasto- ja paikkatietoaineistoja. Tarkempaa tieto indikaattoreista ja metodologiasta löydät sovelluksen [Lisätietoja](https://diak.shinyapps.io/karttasovellus_test/#info)-osiosta.
+
+Alueprofiili sisältää aina kaikkien osoittimien tiedot sekä valitulta alueelta että alueen rajanaapureista. Lisäksi alueprofiilissa esitetään kunkin osoittimen korkein ja matalin arvo. Tiedot esitetään taulukkoina, karttakuvioina sekä aikasarjakuvioina, joista näkee kunkin osoittimen kehityksen 2010-luvulla sekä valitulla alueella että sen naapureissa. Raportin lopussa on tiedot pienituloisuudesta ja työttömyydestä kaikilta alueen postinumeroalueilta.
+
+Tässä raportissa tarkastellaan tasolla `r params_region_level` aluetta `r params_region`. Lisäksi tarkastelussa ovat rajanaapurit: `r region_data %>% filter(level == params_region_level) %>% filter(region_code %in% naapurikoodit) %>% pull(region_name) %>% glue_collapse(sep = ", ", last = " ja ")`.
+
+
+
+
+```{r kartta, fig.height=5.5, fig.width=3}
+dat <- sf::st_transform(spatdat, crs = 3067)
+dat_region <- dat[dat$aluenimi == params_region,]
+dat_naapurit <- dat[dat$aluekoodi %in% naapurikoodit,]
+# 
+# sf::st_coordinates(dat_naapurit) %>% 
+#   as_tibble() %>% 
+#   summarise(max_x = max(X, na.rm = TRUE),
+#             max_y = max(Y, na.rm = TRUE),
+#             min_x = min(X, na.rm = TRUE),
+#             min_y = min(Y, na.rm = TRUE),
+#             median_x = median(X, na.rm = TRUE),
+#             median_y = median(Y, na.rm = TRUE)) -> crd_sum
+
+ggplot() +                    
+    geom_sf(data = dat %>% sf::st_union(), color = alpha("dim grey", 1/3), 
+            fill = NA, size = .3)  +
+    theme_void() +
+    labs(fill = NULL,
+         title = NULL,
+         subtitle = NULL,
+         caption = NULL) +
+  geom_sf(data = dat_naapurit %>% filter(variable == "Huono-osaisuus yhteensä"), fill = alpha("#3b0083", 1/3), color = alpha("white", 1/3)) +
+  geom_sf(data = dat_region %>% filter(variable == "Huono-osaisuus yhteensä"), 
+          fill = "#3b0083", color = alpha("white", 1/3)) +
+ theme(axis.text = element_blank(),
+          axis.title = element_blank(),
+          panel.grid = element_blank(), 
+          legend.position = "none") -> p
+# if (F){
+#  p + geom_label(
+#     aes(
+#       x = crd_sum$max_x , y = crd_sum$median_y,
+#       label = glue('{glue_collapse(unique(dat_naapurit$aluenimi), sep = ",\n", last = " ja\n")}\n<-')
+#     ),family = "Fira Code",
+#     label.size = 0, 
+#     hjust = 0, 
+#     vjust = 0
+#   ) 
+# } else {
+  dat_naapurit_1 <- dat_naapurit %>%  filter(variable == "Huono-osaisuus yhteensä")
+  p + ggrepel::geom_label_repel(data = dat_naapurit_1 %>% 
+                                           sf::st_set_geometry(NULL) %>%
+                                           bind_cols(dat_naapurit_1 %>%
+                                                       sf::st_centroid() %>%
+                                                       sf::st_coordinates() %>% as_tibble()),
+                                         aes(label = aluenimi, x = X, y = Y),
+                                         color = "black", fill = "white", 
+                               label.size = 0 ,  family = "Lato",
+                               lineheight = .8, size = 2.5, 
+                               min.segment.length = unit(5, "mm"), max.overlaps = 20)
+# }
+
+```
+
+
+
+# Summamuuttujat
+
+```{r info_summa, include = FALSE}
+muuttujaluokka = "Summamuuttujat"
+ncol = 2
+```
+
+```{r summa_kartta}
+print_create_map_plot(varclass = muuttujaluokka, 
+                      reglevel = params_region_level, 
+                      regname = params_region, 
+                      naapurit = naapurikoodit,
+                      valid_vars = valid_variables,
+                      ncol = 2)
+```
+
+
+```{r summa_tbl, results = "asis"}
+print_create_table(varclass = muuttujaluokka,
+                   valid_vars = valid_variables,
+                   tabdat2 = tabdat)
+```
+
+
+```{r summa_kuva}
+print_create_timeseries_plot(varclass = muuttujaluokka, 
+                      reglevel = params_region_level, 
+                      regname = params_region, 
+                      valid_vars = valid_variables,
+                      naapurit = naapurikoodit,
+                      ncol = 2)
+```
+
+
+# Inhimillinen huono-osaisuus
+
+
+```{r info_inhim, include = FALSE}
+muuttujaluokka = "Inhimillinen huono-osaisuus"
+```
+
+
+```{r inhim_kartta}
+print_create_map_plot(varclass = muuttujaluokka, 
+                      reglevel = params_region_level, 
+                      valid_vars = valid_variables,
+                      regname = params_region, 
+                      naapurit = naapurikoodit,
+                      ncol = 2)
+```
+
+```{r inhim_tbl, results = "asis"}
+print_create_table(varclass = muuttujaluokka,
+                   valid_vars = valid_variables,
+                   tabdat2 = tabdat)
+```
+
+```{r inhim_kuva}
+print_create_timeseries_plot(varclass = muuttujaluokka, 
+                      reglevel = params_region_level, 
+                      regname = params_region, 
+                      naapurit = naapurikoodit,
+                      valid_vars = valid_variables,
+                      ncol = 2)
+```
+
+
+# Huono-osaisuuden sosiaaliset seuraukset
+
+```{r info_huono, include = FALSE}
+muuttujaluokka = "Huono-osaisuuden sosiaaliset seuraukset"
+```
+
+```{r  sosial_kartta}
+print_create_map_plot(varclass = muuttujaluokka, 
+                      reglevel = params_region_level, 
+                      regname = params_region, 
+                      valid_vars = valid_variables,
+                      naapurit = naapurikoodit,
+                      ncol = 2)
+```
+
+```{r sosial_taulukko, results = "asis"}
+print_create_table(varclass = muuttujaluokka,
+                   valid_vars = valid_variables,
+                   tabdat2 = tabdat)
+```
+
+```{r sosial_kuva}
+print_create_timeseries_plot(varclass = muuttujaluokka, 
+                      reglevel = params_region_level, 
+                      regname = params_region, 
+                      valid_vars = valid_variables,
+                      naapurit = naapurikoodit,
+                      ncol = 2)
+```
+
+
+# Huono-osaisuuden taloudelliset yhteydet
+
+```{r info_talous, include = FALSE}
+muuttujaluokka = "Huono-osaisuuden taloudelliset yhteydet"
+```
+
+
+```{r talous_kartta}
+print_create_map_plot(varclass = muuttujaluokka, 
+                      reglevel = params_region_level, 
+                      regname = params_region, 
+                      valid_vars = valid_variables,
+                      naapurit = naapurikoodit,
+                      ncol = 2)
+```
+
+
+```{r talous_tbl, results = "asis"}
+print_create_table(varclass = muuttujaluokka,
+                   valid_vars = valid_variables,
+                   tabdat2 = tabdat)
+```
+
+```{r talous_kuva}
+print_create_timeseries_plot(varclass = muuttujaluokka, 
+                      reglevel = params_region_level, 
+                      regname = params_region, 
+                      valid_vars = valid_variables,
+                      naapurit = naapurikoodit,
+                      ncol = 2)
+```
+
+# Postinumeroaluekohtaiset tiedot
+
+
+```{r zip_taulu, results = "asis", eval = TRUE}
+aluetaso1 <- params_region_level
+load(system.file("data", "region_data.rda", package="karttasovellus"))
+reg_code <- region_data %>%
+        filter(level == aluetaso1,
+               region_name == params_region) %>%
+        pull(region_code)
+table_zipcodes(input_value_region_selected = reg_code,
+               input_value_regio_level = aluetaso1, 
+               print = TRUE)
+
+```
+
+
+```{r zip_kartta, eval = TRUE}
+map_zipcodes(input_value_region_selected = reg_code,
+                                       input_value_regio_level = aluetaso1,
+                                       input_value_variable = "Kokonaislukema",
+             alueprofiili = TRUE,
+             alueprofiili_doc = TRUE,
+                                       leaflet = FALSE)
+map_zipcodes(input_value_region_selected = reg_code,
+                                   input_value_regio_level = aluetaso1,
+                                   input_value_variable = "Työttömät",
+             alueprofiili = TRUE,
+             alueprofiili_doc = TRUE,
+                                   leaflet = FALSE)
+map_zipcodes(input_value_region_selected = reg_code,
+                                   input_value_regio_level = aluetaso1,
+                                   input_value_variable = "Alimpaan tuloluokkaan kuuluvat täysi-ikäiset",
+             alueprofiili = TRUE,
+             alueprofiili_doc = TRUE,
+                                   leaflet = FALSE)
+map_zipcodes(input_value_region_selected = reg_code,
+                                   input_value_regio_level = aluetaso1,
+                                   input_value_variable = "Alimpaan tuloluokkaan kuuluvat taloudet",
+             alueprofiili = TRUE,
+             alueprofiili_doc = TRUE,
+                                   leaflet = FALSE)
+```
+
+
