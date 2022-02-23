@@ -64,3 +64,27 @@ Pohjanmaan HVA
 Pohjanmaan HVA
 Ylä-Pirkanmaa
 Ylä-Pirkanmaa
+Keski-Pohjanmaan HVA
+Keski-Pohjanmaan HVA
+Lahti
+Lahti
+Pohjois-Pohjanmaan HVA
+Pohjois-Pohjanmaan HVA
+Kouvola
+Kouvola
+Kainuun HVA
+Kotka-Hamina
+Kotka-Hamina
+Kainuun HVA
+Lappeenranta
+Lappeenranta
+Lapin HVA
+Lapin HVA
+Imatra
+Imatra
+Helsingin kaupunki
+Helsingin kaupunki
+Mikkeli
+Mikkeli
+Savonlinna
+Savonlinna
