@@ -1,168 +1,66 @@
-Helsinki
-Helsinki
+Itä-Uudenmaan HVAItä-Uudenmaan HVA
+
+Keski-Uudenmaan HVA
+Keski-Uudenmaan HVA
+Länsi-Uudenmaan HVA
+Länsi-Uudenmaan HVA
+Vantaan ja Keravan HVA
+Vantaan ja Keravan HVA
 Varsinais-Suomen HVA
 Varsinais-Suomen HVA
-Raasepori
-Raasepori
 Satakunnan HVA
 Satakunnan HVA
-Porvoo
-Porvoo
 Kanta-Hämeen HVA
-Loviisa
-Loviisa
 Kanta-Hämeen HVA
-Åboland-Turunmaa
-Åboland-Turunmaa
 Pirkanmaan HVA
 Pirkanmaan HVA
-Salo
-Salo
-Turku
-Turku
 Päijät-Hämeen HVA
 Päijät-Hämeen HVA
-Vakka-Suomi
-Vakka-Suomi
-Loimaa
-Loimaa
 Kymenlaakson HVA
 Kymenlaakson HVA
-Rauma
-Rauma
 Etelä-Karjalan HVA
 Etelä-Karjalan HVA
-Pori
-Pori
 Etelä-Savon HVA
 Etelä-Savon HVA
-Pohjois-Satakunta
-Pohjois-Satakunta
-Hämeenlinna
-Hämeenlinna
 Pohjois-Savon HVA
 Pohjois-Savon HVA
-Riihimäki
-Riihimäki
-Forssa
 Pohjois-Karjalan HVA
 Pohjois-Karjalan HVA
-Forssa
-Luoteis-Pirkanmaa
-Luoteis-Pirkanmaa
 Keski-Suomen HVA
 Keski-Suomen HVA
-Etelä-Pirkanmaa
-Etelä-Pirkanmaa
-Tampere
 Etelä-Pohjanmaan HVA
-Tampere
 Etelä-Pohjanmaan HVA
-Lounais-Pirkanmaa
-Lounais-Pirkanmaa
 Pohjanmaan HVA
 Pohjanmaan HVA
-Ylä-Pirkanmaa
-Ylä-Pirkanmaa
 Keski-Pohjanmaan HVA
 Keski-Pohjanmaan HVA
-Lahti
-Lahti
 Pohjois-Pohjanmaan HVA
 Pohjois-Pohjanmaan HVA
-Kouvola
-Kouvola
 Kainuun HVA
-Kotka-Hamina
-Kotka-Hamina
 Kainuun HVA
-Lappeenranta
-Lappeenranta
 Lapin HVA
 Lapin HVA
-Imatra
-Imatra
 Helsingin kaupunki
 Helsingin kaupunki
-Mikkeli
-Mikkeli
-Savonlinna
-Savonlinna
-Pieksämäki
-Pieksämäki
-Ylä-Savo
-Ylä-Savo
-Kuopio
-Kuopio
-Koillis-Savo
-Koillis-Savo
-Varkaus
-Varkaus
-Sisä-Savo
-Sisä-Savo
-Joensuu
-Joensuu
-Keski-Karjala
-Keski-Karjala
-Pielisen Karjala
-Pielisen Karjala
-Jyväskylä
-Jyväskylä
-Joutsa
-Joutsa
-Keuruu
-Keuruu
-Jämsä
-Jämsä
-Äänekoski
-Äänekoski
-Saarijärvi-Viitasaari
-Saarijärvi-Viitasaari
-Suupohja
-Suupohja
-Seinäjoki
-Seinäjoki
-Kuusiokunnat
-Kuusiokunnat
-Järviseutu
-Järviseutu
-Vaasa
-Vaasa
-Sydösterbotten
-Sydösterbotten
-Jakobstadsregionen
-Jakobstadsregionen
-Kaustinen
-Kaustinen
-Kokkola
-Kokkola
-Oulu
-Oulu
-Oulunkaari
-Oulunkaari
-Raahe
-Raahe
-Haapavesi-Siikalatva
-Haapavesi-Siikalatva
-Nivala-Haapajärvi
-Nivala-Haapajärvi
-Ylivieska
-Ylivieska
-Koillismaa
-Koillismaa
-Kehys-Kainuu
-Kehys-Kainuu
-Kajaani
-Kajaani
-Rovaniemi
-Rovaniemi
-Kemi-Tornio
-Kemi-Tornio
-Torniolaakso
-Torniolaakso
-Itä-Lappi
-Itä-Lappi
-Tunturi-Lappi
-Tunturi-Lappi
-Pohjois-Lappi
-Pohjois-Lappi
+Itä-Uudenmaan HVA
+Keski-Uudenmaan HVA
+Länsi-Uudenmaan HVA
+Vantaan ja Keravan HVA
+Varsinais-Suomen HVA
+Satakunnan HVA
+Kanta-Hämeen HVA
+Pirkanmaan HVA
+Päijät-Hämeen HVA
+Kymenlaakson HVA
+Etelä-Karjalan HVA
+Etelä-Savon HVA
+Pohjois-Savon HVA
+Pohjois-Karjalan HVA
+Keski-Suomen HVA
+Etelä-Pohjanmaan HVA
+Pohjanmaan HVA
+Keski-Pohjanmaan HVA
+Pohjois-Pohjanmaan HVA
+Kainuun HVA
+Lapin HVA
+Helsingin kaupunki
